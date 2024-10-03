@@ -5,6 +5,12 @@ import "./styles/cat_ui/main.scss";
 /*import "./styles/cat_ui/title.main.scss";
 import "./styles/cat_ui/button.main.scss";
 import "./styles/cat_ui/input.a.scss";*/
+const text_placeholder = document.querySelector("p.text_placeholder");
+const input_text = document.querySelector("input.input_text");
+const paragraph_text = document.querySelector("p.paragraph_text");
+const select_theme = document.querySelector("#theme_select");
+const option_theme = document.querySelector("#theme_select option");
+
 // ... existing code ...
 /*
 export const mainWords:Array<string> = [
@@ -458,11 +464,10 @@ import { words as INITIAL_WORDS } from './word/data.ts'
     $wpm!.textContent = wpm
     $accuracy!.textContent = `${accuracy.toFixed(2)}%`
   }*/
-
-    import { words as INITIAL_WORDS } from './word/data.ts';
+/*
+import { words as INITIAL_WORDS } from './word/data.ts';
 import './styles/main.scss';
 import "./styles/cat_ui/main.scss";
-
 
 const $time = document.querySelector('time') as HTMLElement;
 const $paragraph = document.querySelector('p') as HTMLElement;
@@ -636,6 +641,193 @@ function gameOver() {
     const wpm = correctWords * 60 / INITIAL_TIME;
     $wpm.textContent = wpm.toString();
     $accuracy.textContent = `${accuracy.toFixed(2)}%`;
+  }
+}
+
+*/
+
+
+
+
+
+
+
+import { words as INITIAL_WORDS } from './word/data.ts';
+import './styles/main.scss';
+import "./styles/cat_ui/main.scss";
+
+const $time = document.querySelector('time') as HTMLElement;
+const $paragraph = document.querySelector('p') as HTMLElement;
+const $input = document.querySelector('input') as HTMLInputElement;
+const $game = document.querySelector('#game') as HTMLElement;
+const $results = document.querySelector('#results') as HTMLElement;
+const $wpm = $results?.querySelector('#results-wpm') as HTMLElement;
+const $accuracy = $results?.querySelector('#results-accuracy') as HTMLElement;
+const $button = document.querySelector('#reload-button') as HTMLElement;
+
+const INITIAL_TIME = 30;
+
+let words: string[] = [];
+let currentTime = INITIAL_TIME;
+let playing = false;
+
+initGame();
+initEvents();
+
+function initGame() {
+  if ($game && $results && $input && $time && $paragraph) {
+    $game.style.display = 'flex';
+    $results.style.display = 'none';
+    $input.value = '';
+
+    playing = false;
+
+    words = INITIAL_WORDS.sort(() => Math.random() - 0.5).slice(0, 50);
+    currentTime = INITIAL_TIME;
+
+    $time.textContent = currentTime.toString();
+
+    $paragraph.innerHTML = words.map((word: string) => {
+      const letters = word.split('');
+      return `<word>
+        ${letters.map(letter => `<letter>${letter}</letter>`).join('')}
+      </word>`;
+    }).join('');
+
+    const $firstWord = $paragraph.querySelector('word');
+    $firstWord?.classList.add('active');
+    $firstWord?.querySelector('letter')?.classList.add('active');
+  }
+}
+
+function initEvents() {
+  document.addEventListener('keydown', () => {
+    $input?.focus();
+    if (!playing) {
+      playing = true;
+      const intervalId = setInterval(() => {
+        currentTime--;
+        if ($time) $time.textContent = currentTime.toString();
+
+        if (currentTime === 0) {
+          clearInterval(intervalId);
+          gameOver();
+        }
+      }, 1000);
+    }
+  });
+  $input?.addEventListener('keydown', onKeyDown);
+  $input?.addEventListener('keyup', onKeyUp);
+  $button?.addEventListener('click', initGame);
+}
+
+function onKeyDown(event: KeyboardEvent) {
+  const $currentWord = $paragraph?.querySelector('word.active');
+  const $currentLetter = $currentWord?.querySelector('letter.active');
+
+  const { key } = event;
+  if (key === ' ') {
+    event.preventDefault();
+
+    const $nextWord = $currentWord?.nextElementSibling as HTMLElement;
+    const $nextLetter = $nextWord?.querySelector('letter');
+
+    $currentWord?.classList.remove('active', 'marked');
+    $currentLetter?.classList.remove('active');
+
+    $nextWord?.classList.add('active');
+    $nextLetter?.classList.add('active');
+
+    if ($input) $input.value = '';
+
+    const hasMissedLetters = ($currentWord?.querySelectorAll('letter:not(.correct)').length ?? 0) > 0;
+
+    const classToAdd = hasMissedLetters ? 'marked' : 'correct';
+    $currentWord?.classList.add(classToAdd);
+
+    return;
+  }
+
+  if (key === 'Backspace') {
+    const $prevWord = $currentWord?.previousElementSibling as HTMLElement;
+    const $prevLetter = $currentLetter?.previousElementSibling as HTMLElement;
+
+    if (!$prevWord && !$prevLetter) {
+      event.preventDefault();
+      return;
+    }
+
+    const $wordMarked = $paragraph?.querySelector('word.marked');
+    if ($wordMarked && !$prevLetter) {
+      event.preventDefault();
+      $prevWord?.classList.remove('marked');
+      $prevWord?.classList.add('active');
+
+      const $letterToGo = $prevWord?.querySelector('letter:last-child');
+
+      $currentLetter?.classList.remove('active');
+      $letterToGo?.classList.add('active');
+
+      if ($input && $prevWord) {
+        $input.value = Array.from($prevWord.querySelectorAll('letter.correct, letter.incorrect'))
+          .map($el => ($el.classList.contains('correct') ? $el.textContent : '*'))
+          .join('');
+      }
+    }
+  }
+}
+
+function onKeyUp() {
+  const $currentWord = $paragraph?.querySelector('word.active');
+  const $currentLetter = $currentWord?.querySelector('letter.active');
+
+  const currentWord = $currentWord?.textContent?.trim() ?? '';
+  if ($input) $input.maxLength = currentWord.length;
+
+  const $allLetters = $currentWord?.querySelectorAll('letter');
+
+  $allLetters?.forEach($letter => $letter.classList.remove('correct', 'incorrect'));
+
+  if ($input && $allLetters) {
+    $input.value.split('').forEach((char, index) => {
+      const $letter = $allLetters[index];
+      const letterToCheck = currentWord[index];
+
+      const isCorrect = char === letterToCheck;
+      const letterClass = isCorrect ? 'correct' : 'incorrect';
+      $letter?.classList.add(letterClass);
+    });
+  }
+
+  $currentLetter?.classList.remove('active', 'is-last');
+  const inputLength = $input?.value.length ?? 0;
+  const $nextActiveLetter = $allLetters?.[inputLength];
+
+  if ($nextActiveLetter) {
+    $nextActiveLetter.classList.add('active');
+  } else {
+    $currentLetter?.classList.add('active', 'is-last');
+  }
+}
+
+function gameOver() {
+  if ($game && $results && $paragraph && $wpm && $accuracy) {
+    $game.style.display = 'none';
+    $results.style.display = 'flex';
+
+    const correctWords = $paragraph.querySelectorAll('word.correct').length;
+    const correctLetter = $paragraph.querySelectorAll('letter.correct').length;
+    const incorrectLetter = $paragraph.querySelectorAll('letter.incorrect').length;
+
+    const totalLetters = correctLetter + incorrectLetter;
+
+    const accuracyValue = totalLetters > 0
+      ? (correctLetter / totalLetters) * 100
+      : 0;
+
+    const wpm = correctWords * 60 / INITIAL_TIME;
+    $wpm.textContent = wpm.toString();
+    $accuracy.textContent = `${accuracyValue.toFixed(2)}%`;
   }
 }
 
