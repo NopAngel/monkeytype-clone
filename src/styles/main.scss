@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+/*
+:root {
+    --primary-color: #222;
+    --secondary-color: #fff;
+    --text-color-secondary: #ef5b5b;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    color-scheme: dark;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+section.sect_main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    height: 100vh;
+}
+
+input.input_text {
+    width: 500px;
+    height: 30px;
+    border: none;
+    outline: none;
+    opacity: 1;
+    background: transparent;
+    color: transparent;
+    z-index: 1000;   
+    font-size: 1rem;
+}
+
+.win_sect {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    justify-content: center;
+}
+
+.paragraph_text {
+    opacity: 50%;
+}
+
+.content_sect{
+    position: relative;
+}
+
+.content_sect > input {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+
+.animated-cursor {
+    display: inline-block;
+    animation: blink 0.7s steps(2, start) infinite;
+    opacity: 1;
+}
+
+@keyframes blink {
+    to {
+        opacity: 0;
+    }
+}
+
+.blink {
+    animation: blink 0.7s steps(2, start) 1;
+}
+
+.correct-word, .incorrect-word {
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.incorrect-word {
+    color: red;
+}
+
+@keyframes smoothAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-in {
+    animation: smoothAppear 0.5s ease forwards;
+}
+
+time {
+    font-size: 1.5rem;
+    color: yellow;
+    font-family: monospace;
+}
+
+.text_placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 50%;
+} 
+
+.paragraph_text{
+    width: 500px;
+}*/
+
+
+:root {
+    color-scheme: light dark;
+    --green: #00b755;
+    --yellow: #daaf38;
+    --red: #ca4754;
+    --black: #222;
+    --gray: #999;
+    // ...
+    --vscode-scheme:#1e1e1e;
+    --vscode-green: #00b755;
+    --vscode-yellow: #007acc;
+    --vscode-red: #ca4754;
+    --vscode-black: #181818;
+}
+
+  body {
+    background: var(--black);
+    font-family: Menlo, monospace;
+    display: grid;
+    padding: 32px;
+    justify-content: center;
+    margin-top: 32px;
+    padding: 16px;
+  }
+
+  section {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 500px;
+  }
+
+  time {
+    color: var(--yellow)
+  }
+
+  input {
+    z-index: -999;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  p {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px 8px;
+    margin: 0;
+  }
+
+  letter {
+    color: var(--gray);
+    position: relative;
+
+    &.active::before {
+      content: '|';
+      color: var(--yellow);
+      font-size: 14px;
+      position: absolute;
+      left: -65%;
+      animation: 1s blink infinite ease-in-out;
+    }
+
+    &.active.is-last::before {
+      left: 65%;
+    }
+
+    &.correct {
+      color: var(--green);
+    }
+
+    &.incorrect {
+      color: var(--red);
+    }
+  }
+
+  word {
+    border-bottom: 1.5px solid transparent;
+    transition: border-color 0.3s ease-in-out;
+
+    &.marked {
+      border-color: var(--red);
+    }
+  }
+
+  @keyframes blink {
+
+    0%,
+    25% {
+      opacity: 1;
+    }
+
+    75% {
+      opacity: 0;
+    }
+  }
+
+  #game {
+    display: flex;
+  }
+
+  #results {
+    display: none;
+  }
+
+  h2 {
+    font-weight: 400;
+    opacity: .4;
+    margin: 0;
+    font-size: 16px;
+  }
+
+  h3 {
+    font-weight: 400;
+    margin: 0;
+    font-size: 24px;
+    color: var(--yellow);
+  }
+
+  button {
+    background: transparent;
+    border: 0;
+    margin-top: 32px;
+    padding: 8px;
+    opacity: .4;
+    display: inline-block;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    cursor: pointer;
+    border-radius: 16px;
+
+    &:hover {
+      background: #444;
+      opacity: 1;
+      scale: 110%;
+    }
+  }
+
+
+  footer > nav > ul {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  select {
+    padding: 4px;
+    background-color: transparent;
+  }
+
+  option {
+    background-color: #222;
+  }
