@@ -5,11 +5,7 @@ import "./styles/cat_ui/main.scss";
 /*import "./styles/cat_ui/title.main.scss";
 import "./styles/cat_ui/button.main.scss";
 import "./styles/cat_ui/input.a.scss";*/
-const text_placeholder = document.querySelector("p.text_placeholder");
-const input_text = document.querySelector("input.input_text");
-const paragraph_text = document.querySelector("p.paragraph_text");
-const select_theme = document.querySelector("#theme_select");
-const option_theme = document.querySelector("#theme_select option");
+
 
 // ... existing code ...
 /*
