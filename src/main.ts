@@ -5,12 +5,6 @@ import "./styles/cat_ui/main.scss";
 /*import "./styles/cat_ui/title.main.scss";
 import "./styles/cat_ui/button.main.scss";
 import "./styles/cat_ui/input.a.scss";*/
-const text_placeholder = document.querySelector("p.text_placeholder");
-const input_text = document.querySelector("input.input_text");
-const paragraph_text = document.querySelector("p.paragraph_text");
-const select_theme = document.querySelector("#theme_select");
-const option_theme = document.querySelector("#theme_select option");
-
 // ... existing code ...
 /*
 export const mainWords:Array<string> = [
@@ -469,14 +463,15 @@ import { words as INITIAL_WORDS } from './word/data.ts'
 import './styles/main.scss';
 import "./styles/cat_ui/main.scss";
 
-const $time = document.querySelector('time');
-const $paragraph = document.querySelector('p');
-const $input = document.querySelector('input');
-const $game = document.querySelector('#game');
-const $results = document.querySelector('#results');
-const $wpm = $results?.querySelector('#results-wpm');
-const $accuracy = $results?.querySelector('#results-accuracy');
-const $button = document.querySelector('#reload-button');
+
+const $time = document.querySelector('time') as HTMLElement;
+const $paragraph = document.querySelector('p') as HTMLElement;
+const $input = document.querySelector('input') as HTMLInputElement;
+const $game = document.querySelector('#game') as HTMLElement;
+const $results = document.querySelector('#results') as HTMLElement;
+const $wpm = $results?.querySelector('#results-wpm') as HTMLElement;
+const $accuracy = $results?.querySelector('#results-accuracy') as HTMLElement;
+const $button = document.querySelector('#reload-button') as HTMLElement;
 
 const INITIAL_TIME = 30;
 
