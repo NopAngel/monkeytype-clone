@@ -5,8 +5,6 @@ import "./styles/cat_ui/main.scss";
 /*import "./styles/cat_ui/title.main.scss";
 import "./styles/cat_ui/button.main.scss";
 import "./styles/cat_ui/input.a.scss";*/
-
-
 // ... existing code ...
 /*
 export const mainWords:Array<string> = [
@@ -652,8 +650,8 @@ import { words as INITIAL_WORDS } from './word/data.ts';
 import './styles/main.scss';
 import "./styles/cat_ui/main.scss";
 
-const $time = document.querySelector('time') as HTMLElement;
-const $paragraph = document.querySelector('p') as HTMLElement;
+const $time = document.querySelector('time') as HTMLTimeElement;
+const $paragraph = document.querySelector('p') as HTMLParagraphElement;
 const $input = document.querySelector('input') as HTMLInputElement;
 const $game = document.querySelector('#game') as HTMLElement;
 const $results = document.querySelector('#results') as HTMLElement;
